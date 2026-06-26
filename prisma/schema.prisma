@@ -1,0 +1,57 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id            String   @id @default(uuid())
+  name          String
+  email         String   @unique
+  password_hash String
+  role          String   // PLAYER | COACH | ADMIN
+  created_at    DateTime @default(now())
+
+  playerProfile PlayerProfile?
+  coachProfile  CoachProfile?
+}
+
+model PlayerProfile {
+  id       String @id @default(uuid())
+  user     User   @relation(fields: [userId], references: [id])
+  userId   String @unique
+  age      Int?
+  level    Int?
+  position String?
+}
+
+model CoachProfile {
+  id              String @id @default(uuid())
+  user            User   @relation(fields: [userId], references: [id])
+  userId          String @unique
+  bio             String?
+  experience_years Int?
+  hourly_rate_cents Int?
+  specialties     String[]
+}
+
+model Booking {
+  id        String   @id @default(uuid())
+  playerId  String
+  coachId   String
+  time      DateTime
+  status    String   // PENDING | PAID | CANCELLED | COMPLETED
+  createdAt DateTime @default(now())
+}
+
+model PaymentIntent {
+  id                      String   @id @default(uuid())
+  bookingId               String
+  stripe_payment_intent_id String
+  amount_cents            Int
+  currency                String
+  status                  String
+}
