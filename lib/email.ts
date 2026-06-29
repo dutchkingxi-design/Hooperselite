@@ -7,7 +7,7 @@ export const sendEmail = async ({ to, subject, html }: { to: string; subject: st
       user: process.env.SYSTEM_EMAIL,
       pass: process.env.SYSTEM_EMAIL_PASSWORD
     }
-  });
+  } as any);
 
   await transporter.sendMail({
     from: `"HoopersElite Academy" <${process.env.SYSTEM_EMAIL}>`,
