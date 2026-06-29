@@ -32,3 +32,66 @@
     "typescript": "^5.2.0"
   }
 }
+
+Root Layout
+
+Create = app/layout.tsx
+
+export const metadata = {
+  title: "HoopersElite",
+  description: "Elite basketball development platform",
+};
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en">
+      <body>{children}</body>
+    </html>
+  );
+}
+
+Remove fiercely build error
+
+Fix package json
+Replace the entire package json with this;
+
+{
+  "name": "hooperselite",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "next": "14.2.3",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "jsonwebtoken": "9.0.2",
+    "bcryptjs": "2.4.3",
+    "prisma": "5.13.0",
+    "@prisma/client": "5.13.0"
+  }
+}
+
+ FIX API ROUTE 
+Create this folder structure: app/api/auth/login/route.ts
+
+ import { NextResponse } from "next/server";
+import jwt from "jsonwebtoken";
+
+export async function POST(req: Request) {
+  const { email, password } = await req.json();
+
+  // Example only — replace with your real auth logic
+  if (email === "test@example.com" && password === "password") {
+    const token = jwt.sign({ email }, process.env.JWT_SECRET!, {
+      expiresIn: "1h",
+    });
+
+    return NextResponse.json({ token });
+  }
+
+  return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
+}
