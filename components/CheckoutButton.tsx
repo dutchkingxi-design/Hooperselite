@@ -20,7 +20,7 @@ export default function CheckoutButton({ bookingId, amount, currency }: Checkout
         body: JSON.stringify({ bookingId, amount, currency })
       });
 
-      const { clientSecret } = await res.json();
+      await res.json();
       // Redirect to Stripe checkout (integrate with Stripe.js)
       window.location.href = `/success?bookingId=${bookingId}`;
     } catch (error) {
